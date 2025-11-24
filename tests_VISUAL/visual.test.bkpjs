@@ -1,0 +1,27 @@
+const path = require('path');
+
+// Prueba usando Playwright (ejemplo conceptual)
+describe('Validación de Usuario Visual', () => {
+
+    test('debería mostrar el borde rojo para nombre corto', async () => {
+        // Construye la ruta al archivo HTML local y navega a él
+        const filePath = path.resolve(__dirname, '../src/index.html');
+        await page.goto(`file://${filePath}`);
+
+        // Simula la entrada de datos
+        await page.type('#username', 'Short1!'); 
+        
+        // Opcional: Espera a que el estilo se aplique
+        await page.waitForSelector('#username[style*="border-color: red"]'); 
+
+        // Añade una pausa de 3 segundos para que puedas ver el navegador.
+        // ¡Recuerda quitar esto cuando no estés depurando!
+        await page.waitForTimeout(3000);
+
+        // 📸 Toma la captura de pantalla real
+        await page.screenshot({ path: path.join(__dirname, 'screenshots', 'error-corto.png') });
+        
+        // Verifica la estructura con Jest si es necesario
+        // expect(...)
+    });
+});

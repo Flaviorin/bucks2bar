@@ -1,0 +1,22 @@
+{
+  "name": "bucks2bar",
+  "version": "1.0.0",
+  "description": "The bucks2bar project is a web application that utilizes Bootstrap for responsive design and custom styles and scripts for enhanced functionality. This project aims to provide a user-friendly interface and seamless user experience.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config=tests/jest.config.js",
+    "test:dom": "jest --config=tests_DOM/jest.config.js",
+    "test:visual": "jest --config=tests_VISUAL/jest.config.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "dependencies": {
+    "jest-playwright-preset": "^4.0.0",
+    "playwright": "^1.56.1"
+  }
+}

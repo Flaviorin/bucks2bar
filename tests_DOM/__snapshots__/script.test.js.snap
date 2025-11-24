@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Username Validation should show red border for username shorter than 8 characters 1`] = `
+<input
+  id="username"
+  style="border-color: red;"
+  type="text"
+/>
+`;
