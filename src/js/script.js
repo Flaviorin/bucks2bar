@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const chartTab = document.querySelector('#chart-tab');
     const monthlyDataContainer = document.getElementById('monthly-data-container');
     const ctx = document.getElementById('myBarChart').getContext('2d');
@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
         'july', 'august', 'september', 'october', 'november', 'december'
     ];
 
-    function generateMonthlyInputs() {
-        months.forEach(month => {
+    const generateMonthlyInputs = () => {
+        const allMonthsHTML = months.map(month => {
             const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
-            const monthHTML = `
+            return `
                 <div class="col-12 col-md-6 mb-3">
                     <div class="p-3 border bg-light">
                         <strong>${capitalizedMonth}</strong>
@@ -34,30 +34,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
             `;
-            monthlyDataContainer.innerHTML += monthHTML;
-        });
-    }
+        }).join('');
+        monthlyDataContainer.innerHTML = allMonthsHTML;
+    };
 
     // Generar los campos de entrada para los meses al cargar la página
     generateMonthlyInputs();
 
-    function getFinancialData() {
-        const incomes = [];
-        const expenses = [];
-
-        months.forEach(month => {
+    const getFinancialData = () => {
+        const incomes = months.map(month => {
             const income = parseFloat(document.getElementById(`income-${month}`).value) || 0;
-            const expense = parseFloat(document.getElementById(`expenses-${month}`).value) || 0;
-            incomes.push(income);
-            expenses.push(expense);
+            return income;
         });
-
+        const expenses = months.map(month => parseFloat(document.getElementById(`expenses-${month}`).value) || 0);
         return { incomes, expenses };
-    }
+    };
 
-    function createOrUpdateChart() {
+    const createOrUpdateChart = () => {
         const { incomes, expenses } = getFinancialData();
-
         const data = {
             labels: months.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
             datasets: [
@@ -87,16 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 data: data,
             });
         }
-    }
+    };
 
-    chartTab.addEventListener('shown.bs.tab', function () {
-        createOrUpdateChart();
-    });
+    chartTab.addEventListener('shown.bs.tab', () => createOrUpdateChart());
 
     // Lógica para descargar el gráfico
     const downloadBtn = document.getElementById('download-chart-btn');
-    downloadBtn.addEventListener('click', function() {
-        // Obtiene la URL de datos del canvas como una imagen PNG
+    downloadBtn.addEventListener('click', () => {
+        if (!myBarChart) return;
         const imageLink = myBarChart.toBase64Image();
 
         // Crea un elemento de enlace temporal
@@ -112,23 +104,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // input with id "username"
     const usernameInput = document.getElementById('username');
-    usernameInput.addEventListener('input', function () {
+    usernameInput.addEventListener('input', () => {
         const username = usernameInput.value;
-        console.log('Username entered:', username);
-        // Aquí puedes agregar lógica adicional para manejar el nombre de usuario
 
-        // Validar que el valor ingresado contenga como mínimo 8 caracteres y un máximo de 15, de ellos al menos un caracter debe ser mayuscula, y un otro de los caracteres debe de ser especial, y otro de ellos debe de ser numérico.
+        // Validar que el valor ingresado contenga como mínimo 8 y máximo 15 caracteres,
+        // al menos una mayúscula, un número y un carácter especial.
         const usernamePattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*\u00C0-\u017F]{8,15}$/;
-        if (!usernamePattern.test(username)) {
-            // Si no cumple con el patrón, el borde del input debe aparecer en color rojo
+        const isValid = usernamePattern.test(username);
+
+        if (!isValid) {
             usernameInput.style.borderColor = 'red';
             usernameInput.setCustomValidity('El nombre de usuario debe tener entre 8 y 15 caracteres, incluir al menos una mayúscula, un número y un carácter especial.');
-            usernameInput.reportValidity();
         } else {
             usernameInput.style.borderColor = 'green';
             usernameInput.setCustomValidity('');
-            usernameInput.reportValidity();
         }
+        usernameInput.reportValidity();
     });
-
 });
